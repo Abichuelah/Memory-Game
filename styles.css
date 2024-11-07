@@ -1,0 +1,69 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px); /* 3 columnas para un total de 12 cartas */
+    grid-gap: 10px;
+}
+
+.card {
+    width: 100px;
+    height: 100px;
+    background-color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    transform: rotateY(0);
+    transition: transform 0.4s;
+}
+
+.card.flip {
+    transform: rotateY(180deg);
+}
+
+.card .front, 
+.card .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.card .front {
+    background-color: #f0f0f0;
+}
+
+.card .back {
+    background-size: cover;
+    background-position: center;
+    transform: rotateY(180deg);
+}
+
+.congrats-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    opacity: 0;
+    text-align: center;
+    font-size: 1.5em;
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.congrats-message.animate {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+}
