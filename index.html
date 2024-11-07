@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Memoria</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <div id="controls">
-        <span id="timer-display">Tiempo: 0:00</span>
-        <button id="pause-button">Pausar</button>
+    <div class="header">
+        <div id="controls">
+            <span id="timer-display">Tiempo: 0:00</span>
+            <button id="pause-button">Pausar</button>
+            <button id="start-game-button">Iniciar Partida</button>
+        </div>
     </div>
     <div id="game-board">
         <!-- Las tarjetas se generarán aquí dinámicamente -->
-    </div>    
+    </div>
+    <div id="confetti-container"></div>
     <script src="script.js"></script>
 </body>
 </html>

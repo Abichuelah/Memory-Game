@@ -1,69 +1,133 @@
+/* Estilo general del cuerpo */
 body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     height: 100vh;
+    margin: 0;
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
 }
 
-#game-board {
-    display: grid;
-    grid-template-columns: repeat(3, 100px); /* 3 columnas para un total de 12 cartas */
-    grid-gap: 10px;
+/* Estilo del encabezado */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.card {
-    width: 100px;
-    height: 100px;
-    background-color: #333;
+/* Controles del juego */
+#controls {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Estilo para el tablero de juego */
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas, ajusta cada columna proporcionalmente */
+    grid-gap: 10px;
+    width: 90vw; /* Usa el 90% del ancho de la ventana */
+    max-width: 800px; /* Límite en pantallas grandes */
+}
+
+/* Estilo para las cartas del juego */
+.card {
+    width: 100%; /* Cada carta toma todo el ancho de su columna */
+    aspect-ratio: 1 / 1; /* Mantén las cartas cuadradas */
+    display: flex;
     position: relative;
     cursor: pointer;
-    transform: rotateY(0);
-    transition: transform 0.4s;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
 }
 
 .card.flip {
     transform: rotateY(180deg);
 }
 
-.card .front, 
+.card .front,
 .card .back {
     position: absolute;
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
+    background-size: cover; /* Asegura que la imagen cubra toda la tarjeta */
+    background-position: center; /* Centra la imagen en la tarjeta */
 }
 
 .card .front {
-    background-color: #f0f0f0;
+    background-image: url('images/reverso.png'); /* Imagen de reverso */
+    transform: rotateY(0deg);
 }
 
 .card .back {
-    background-size: cover;
-    background-position: center;
     transform: rotateY(180deg);
 }
 
-.congrats-message {
+/* Estilo del mensaje de felicitaciones */
+#confetti-container {
+    position: fixed; /* Cambiar a fixed para que esté siempre en pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1; /* Coloca el confeti detrás del SweetAlert */
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0.7;
+    transform: rotate(45deg);
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { 
+        transform: translateY(-100vh) rotate(0deg); 
+    }
+    100% { 
+        transform: translateY(100vh) rotate(720deg); 
+    }
+}
+
+#congratulations-message {
+    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    opacity: 0;
-    text-align: center;
-    font-size: 1.5em;
-    transition: opacity 0.5s, transform 0.5s;
+    font-size: 2em;
+    color: #FF6347;
+    z-index: 15;
+    animation: pop-up 1s ease-out forwards;
 }
 
-.congrats-message.animate {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.2);
+@keyframes pop-up {
+    0% { transform: translate(-50%, -50%) scale(0); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes sparkle {
+    0% { transform: scale(0.5); opacity: 0.5; }
+    50% { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(0.5); opacity: 0; }
+}
+
+#congratulations-message::after {
+    content: '✨';
+    font-size: 1.5em;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: sparkle 1.5s ease-in-out infinite;
 }
