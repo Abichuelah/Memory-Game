@@ -5,7 +5,17 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-image: url('images/background.gif');
+    font-family: Arial, sans-serif;
+}
+
+body-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url('images/tablero.jpg');
     font-family: Arial, sans-serif;
 }
 
@@ -18,11 +28,48 @@ body {
     text-align: center;
 }
 
+#menuButton {
+    background-color: violet; /* Verde */
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: fixed;
+    bottom: 20px; /* Ajusta según lo cerca que quieras del borde */
+    left: 20px; /* Ajusta según lo cerca que quieras del borde */
+}
+
+#menuButton:hover {
+    background-color: rgb(248, 3, 85);
+}
+
 /* Controles del juego */
 #controls {
     display: flex;
     gap: 10px;
     margin-top: 10px;
+    color:#f70098;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: larger;
+}
+/* Estilo para todos los botones */
+button {
+    background-color: violet; /* Verde */
+    color: black;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 50px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+button:hover {
+    background-color: rgb(248, 3, 85); /* Al pasar el mouse cambia el color */
 }
 
 /* Estilo para el tablero de juego */
