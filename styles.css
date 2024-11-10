@@ -1,4 +1,4 @@
-/* Estilo general del cuerpo */
+/* Estilo general de la página */
 body {
     display: flex;
     flex-direction: column;
@@ -6,16 +6,6 @@ body {
     height: 100vh;
     margin: 0;
     background-image: url('images/background.gif');
-    font-family: Arial, sans-serif;
-}
-
-body-2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-image: url('images/tablero.jpg');
     font-family: Arial, sans-serif;
 }
 
@@ -29,7 +19,7 @@ body-2 {
 }
 
 #menuButton {
-    background-color: violet; /* Verde */
+    background-color: violet; /* Violeta */
     color: black;
     padding: 10px 20px;
     border: none;
@@ -38,8 +28,8 @@ body-2 {
     cursor: pointer;
     transition: background-color 0.3s;
     position: fixed;
-    bottom: 20px; /* Ajusta según lo cerca que quieras del borde */
-    left: 20px; /* Ajusta según lo cerca que quieras del borde */
+    bottom: 20px; 
+    left: 20px; 
 }
 
 #menuButton:hover {
@@ -55,9 +45,10 @@ body-2 {
     font-family: 'Trebuchet MS', sans-serif;
     font-size: larger;
 }
+
 /* Estilo para todos los botones */
 button {
-    background-color: violet; /* Verde */
+    background-color: violet; /* Violeta */
     color: black;
     padding: 5px 10px;
     border: none;
@@ -75,7 +66,7 @@ button:hover {
 /* Estilo para el tablero de juego */
 #game-board {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas, ajusta cada columna proporcionalmente */
+    grid-template-columns: repeat(4, 1fr); /* Creado de 4 columnas, se ajusta cada columna proporcionalmente */
     grid-gap: 10px;
     width: 90vw; /* Usa el 90% del ancho de la ventana */
     max-width: 800px; /* Límite en pantallas grandes */
@@ -84,7 +75,7 @@ button:hover {
 /* Estilo para las cartas del juego */
 .card {
     width: 100%; /* Cada carta toma todo el ancho de su columna */
-    aspect-ratio: 1 / 1; /* Mantén las cartas cuadradas */
+    aspect-ratio: 1 / 1; /* Mantiene las cartas cuadradas */
     display: flex;
     position: relative;
     cursor: pointer;
@@ -117,14 +108,14 @@ button:hover {
 
 /* Estilo del mensaje de felicitaciones */
 #confetti-container {
-    position: fixed; /* Cambiar a fixed para que esté siempre en pantalla */
+    position: fixed; /* Para que esté siempre en pantalla */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
     overflow: hidden;
-    z-index: 1; /* Coloca el confeti detrás del SweetAlert */
+    z-index: 1; /* Coloca el confetti detrás del SweetAlert */
 }
 
 .confetti {
@@ -161,20 +152,4 @@ button:hover {
 @keyframes pop-up {
     0% { transform: translate(-50%, -50%) scale(0); }
     100% { transform: translate(-50%, -50%) scale(1); }
-}
-
-@keyframes sparkle {
-    0% { transform: scale(0.5); opacity: 0.5; }
-    50% { transform: scale(1.5); opacity: 1; }
-    100% { transform: scale(0.5); opacity: 0; }
-}
-
-#congratulations-message::after {
-    content: '✨';
-    font-size: 1.5em;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: sparkle 1.5s ease-in-out infinite;
 }
