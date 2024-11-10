@@ -1,17 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Fondo base al cargar la página
+    document.body.style.backgroundImage = "url('images/background.gif')";
+    document.body.style.backgroundSize = "cover";
+
     const cardsArray = [
-        { name: 'image1', img: 'images/image1.jpg' },
-        { name: 'image1', img: 'images/image1.jpg' },
-        { name: 'image2', img: 'images/image2.jpg' },
-        { name: 'image2', img: 'images/image2.jpg' },
-        { name: 'image3', img: 'images/image3.jpg' },
-        { name: 'image3', img: 'images/image3.jpg' },
-        { name: 'image4', img: 'images/image4.jpg' },
-        { name: 'image4', img: 'images/image4.jpg' },
-        { name: 'image5', img: 'images/image5.jpg' },
-        { name: 'image5', img: 'images/image5.jpg' },
-        { name: 'image6', img: 'images/image6.jpg' },
-        { name: 'image6', img: 'images/image6.jpg' }
+        { name: 'image1', img: 'images/image1.png' },
+        { name: 'image1', img: 'images/image1.1.png' },
+        { name: 'image2', img: 'images/image2.png' },
+        { name: 'image2', img: 'images/image2.1.png' },
+        { name: 'image3', img: 'images/image3.png' },
+        { name: 'image3', img: 'images/image3.1.png' },
+        { name: 'image4', img: 'images/image4.png' },
+        { name: 'image4', img: 'images/image4.1.png' },
+        { name: 'image5', img: 'images/image5.png' },
+        { name: 'image5', img: 'images/image5.1.png' },
+        { name: 'image6', img: 'images/image6.png' },
+        { name: 'image6', img: 'images/image6.1.png' }
     ];
 
     const gameBoard = document.getElementById('game-board');
@@ -25,21 +29,158 @@ document.addEventListener('DOMContentLoaded', () => {
     let timer;
     let time = 0;
     let matchedPairs = 0;
+    let countdownDisplay, countdownInterval;
 
-    // Agregar eventos de inicio y pausa
-    startButton.addEventListener('click', startGame);
-    pauseButton.addEventListener('click', togglePause);
+        // Al cargar la página, comprobamos si el fondo es 'background.gif' y ocultamos los elementos
+        checkBackground();
 
-    // Inicia el juego
+    // Mostrar alerta de inicio del juego
+    startButton.addEventListener('click', showStartAlert);
+
+    function showStartAlert() {
+        // Asegurarse de que el fondo es 'background.gif' y ocultar los controles
+        document.body.style.backgroundImage = "url('images/background.gif')";
+        document.body.style.backgroundSize = "cover";
+
+        // Ocultar controles (pausar, timer) antes de la alerta
+        hideControlsForAlert();
+
+        // Ocultar el tablero de cartas y el temporizador antes de la cuenta regresiva
+        gameBoard.style.display = 'none';
+        timerDisplay.style.display = 'none';
+        pauseButton.style.display = 'none'; // Ocultar también el botón de pausa
+
+        // Mostrar la alerta de inicio del juego con SweetAlert
+        Swal.fire({
+            title: '¿Listo para comenzar?',
+            text: '¡La partida comenzará en 5 segundos, prepárate!',
+            icon: 'info',
+            confirmButtonText: 'Ok',
+            allowOutsideClick: false, // No permitir interacción fuera de la alerta
+            backdrop: true, // Asegura que el fondo se oscurezca mientras está visible la alerta
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Después de que se confirme la alerta, iniciar el fondo de video y la cuenta atrás
+                changeBackgroundToVideo();
+                startCountdown();
+            }
+        });
+    }
+
+    function hideControlsForAlert() {
+        // Escondemos controles específicos durante la alerta
+        pauseButton.style.display = 'none';
+        timerDisplay.style.display = 'none';
+    }
+
+    function hideControlsForBackground() {
+        // Ocultar el temporizador y el botón de pausa si el fondo es 'background.gif' o 'instructions.mp4'
+        const backgroundImage = document.body.style.backgroundImage;
+        if (backgroundImage.includes('background.gif') || backgroundImage.includes('instructions.mp4')) {
+            timerDisplay.style.display = 'none';
+            pauseButton.style.display = 'none';
+        } else {
+            timerDisplay.style.display = 'block';
+            pauseButton.style.display = 'block';
+        }
+    }
+
+    // Cambiar fondo a video y ocultar controles
+    function changeBackgroundToVideo() {
+        document.body.style.backgroundImage = 'none';
+        document.body.style.backgroundColor = 'black';
+    
+        // Ocultar el temporizador y el botón de pausa
+        hideControlsForBackground();
+    
+        const videoElement = document.createElement('video');
+        videoElement.src = 'images/instructions.mp4';
+        videoElement.autoplay = true;
+        videoElement.muted = true;
+        videoElement.loop = true;
+        videoElement.style.position = 'fixed';
+        videoElement.style.top = '0';
+        videoElement.style.left = '0';
+        videoElement.style.width = '100%';
+        videoElement.style.height = '100%';
+        videoElement.style.objectFit = 'cover';
+        document.body.appendChild(videoElement);
+    }
+
+    function startCountdown() {
+        countdownDisplay = document.createElement('div');
+        countdownDisplay.style.position = 'fixed';
+        countdownDisplay.style.top = '10px';
+        countdownDisplay.style.right = '10px';
+        countdownDisplay.style.fontSize = '20px';
+        countdownDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        countdownDisplay.style.color = 'white';
+        countdownDisplay.style.padding = '5px 10px';
+        countdownDisplay.style.borderRadius = '5px';
+        document.body.appendChild(countdownDisplay);
+
+        let countdownTime = 5;
+        countdownDisplay.textContent = `Comienza en: ${countdownTime}`;
+
+        countdownInterval = setInterval(() => {
+            countdownTime--;
+            countdownDisplay.textContent = `Comienza en: ${countdownTime}`;
+
+            if (countdownTime === 0) {
+                clearInterval(countdownInterval);
+                countdownDisplay.remove();
+                changeBackgroundToBoard(); // Cambia el fondo al tablero antes de iniciar el juego
+                startGame(); // Inicia el juego después del contador
+            }
+        }, 1000);
+    }
+
+    function changeBackgroundToBoard() {
+        // Cambiar el fondo al tablero cuando el juego inicia
+        document.body.style.backgroundImage = "url('images/tablero.jpg')";
+        document.body.style.backgroundSize = "cover";
+    
+        // Eliminar el video de instrucciones si existe
+        const videoElement = document.querySelector('video');
+        if (videoElement) {
+            videoElement.remove();
+        }
+
+    // Mostrar el tablero y el temporizador
+    gameBoard.style.display = 'grid';
+    timerDisplay.style.display = 'block';
+    pauseButton.style.display = 'block'; // Mostrar el botón de pausa al comenzar el juego
+}
+
+    // Función para reiniciar el juego
     function startGame() {
         resetBoard();
         createBoard();
         resetTimer();
         startTimer();
-        startButton.style.display = 'none';  // Ocultar el botón de iniciar
-        pauseButton.style.display = 'block'; // Asegurar que el botón de pausar sea visible
-        timerDisplay.style.display = 'block'; // Asegurar que el temporizador sea visible al comenzar
+        startButton.style.display = 'none';
+        pauseButton.style.display = 'block';
+        timerDisplay.style.display = 'block';
     }
+
+    // Evento para ir al menú o inicio y recargar el fondo original
+    document.getElementById('menuButton').addEventListener('click', navigateHome);
+
+    // Vuelve al fondo inicial (background.gif) al hacer clic en "Inicio"
+    function navigateHome() {
+        // Recargar la página para restablecer el fondo original
+        location.reload();
+        
+        // Comprobar si el fondo es background.gif y ocultar los elementos si es así
+        if (document.body.style.backgroundImage.includes('background.gif')) {
+            timerDisplay.style.display = 'none';
+            pauseButton.style.display = 'none';
+        }
+    }
+
+    // Agregar eventos de inicio y pausa
+    startButton.addEventListener('click', startGame);
+    pauseButton.addEventListener('click', togglePause);
 
     // Crea el tablero de juego
     function createBoard() {
@@ -153,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         timerDisplay.textContent = 'Tiempo: 0:00';
     }
 
-    // Función para pausar y reanudar el juego
+    // Pausar y reanudar el juego
     function togglePause() {
         isPaused = !isPaused;
         pauseButton.textContent = isPaused ? 'Reanudar' : 'Pausar';
@@ -167,7 +308,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Reiniciar el tablero
+    // Revisar si el fondo es 'background.gif' para ocultar los elementos
+    function checkBackground() {
+        if (document.body.style.backgroundImage.includes('background.gif')) {
+            timerDisplay.style.display = 'none';
+            pauseButton.style.display = 'none';
+        }
+    }
+
+    // Función para reiniciar el juego
     function resetBoard() {
         resetTimer();
         gameBoard.innerHTML = '';
@@ -182,27 +331,30 @@ document.addEventListener('DOMContentLoaded', () => {
         timerDisplay.style.display = 'block'; // Asegurar que el temporizador vuelva a aparecer
     }
 
-    // Mostrar mensaje de felicitaciones con SweetAlert
-    function showCompletionMessage() {
-        pauseButton.style.display = 'none'; // Ocultar el botón de pausar cuando aparece el mensaje de felicitaciones
-        timerDisplay.style.display = 'none'; // Ocultar el temporizador al mostrar la sweet alert
-        launchConfetti();  // Inicia el confeti antes de la sweet alert
-        Swal.fire({
-            title: '¡Felicidades!',
-            text: '¡Completaste el juego!',
-            icon: 'success',
-            confirmButtonText: 'Jugar de nuevo',
-            backdrop: `
-                rgba(0,0,0,0.5)
-                left top
-                no-repeat
-            `,
-            customClass: {
-                popup: 'sweetalert-with-confetti' // Clase CSS para estilo adicional si se necesita
-            }
-        }).then(() => {
-            resetBoard();  // Reinicia el juego al cerrar la sweet alert
-            pauseButton.style.display = 'block'; // Mostrar el botón de pausar nuevamente después de reiniciar el juego
-        });
-    }
+// Mostrar mensaje de felicitaciones con SweetAlert
+function showCompletionMessage() {
+    pauseButton.style.display = 'none'; // Ocultar el botón de pausar cuando aparece el mensaje de felicitaciones
+    timerDisplay.style.display = 'none'; // Ocultar el temporizador al mostrar la sweet alert
+    launchConfetti();  // Inicia el confeti antes de la sweet alert
+    Swal.fire({
+        title: '¡Felicidades!',
+        text: '¡Completaste el juego!',
+        icon: 'success',
+        confirmButtonText: 'Jugar de nuevo',
+        backdrop: `
+            rgba(0,0,0,0.5)
+            left top
+            no-repeat
+        `,
+        customClass: {
+            popup: 'sweetalert-with-confetti' // Clase CSS para estilo adicional si se necesita
+        }
+    }).then(() => {
+        // Redirigir a la pantalla con el video de instrucciones
+        changeBackgroundToVideo();
+        startCountdown();  // Inicia el contador nuevamente
+        resetBoard();  // Reinicia el juego al cerrar la sweet alert
+        pauseButton.style.display = 'none'; // Asegura que el botón de pausar no se vea al reiniciar
+    });
+}
 });
